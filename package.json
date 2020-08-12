@@ -1,0 +1,14 @@
+{
+  "name": "bekk-idrett-rest-api",
+  "version": "1.0.0",
+  "description": "Serverless API for bekk-idrett application",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serverless-bundle": "^2.0.0"
+  }
+}
