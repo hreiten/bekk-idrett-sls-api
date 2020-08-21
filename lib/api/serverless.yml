@@ -1,0 +1,43 @@
+service: bekk-idrett-api
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+
+package:
+  individually: true
+
+custom: ${file(../../lib/serverless/serverless.common.yml):custom}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage,self:custom.stage.dev}
+  region: ${self:custom.region}
+  apiKeys:
+    - name: apiKey
+      value: ${self:custom.secrets.apiSecret}
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /hello
+          method: GET
+          cors: true
+          private: true
+
+resources:
+  Outputs:
+    ApiGatewayRestApiId:
+      Value:
+        Ref: ApiGatewayRestApi
+      Export:
+        Name: ${opt:stage, self:provider.stage}-ExtApiGatewayRestApiId
+
+    ApiGatewayRestApiRootResourceId:
+      Value:
+        Fn::GetAtt: [ApiGatewayRestApi, RootResourceId]
+      Export:
+        Name: ${opt:stage, self:provider.stage}-ExtApiGatewayRestApiRootResourceId

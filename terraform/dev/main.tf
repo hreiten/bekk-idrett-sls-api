@@ -8,7 +8,7 @@ locals {
 }
 
 provider "aws" {
-  version = "3.1.0"
+  version = "~> 2.7"
   region  = local.region
 }
 
@@ -21,3 +21,4 @@ module "bekk-idrett-dev" {
   hosted_zone_name = local.hosted_zone_name
   env              = local.env
 }
+

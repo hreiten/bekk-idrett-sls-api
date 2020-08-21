@@ -1,0 +1,11 @@
+custom:
+  secrets:
+    apiSecret: ${ssm:/bekk-idrett/api/secret}
+  region: eu-west-1
+  bundle:
+    tsConfig: "../../tsconfig.json"
+    sourceMap: false
+    caching: false
+  stage:
+    prod: prod
+    dev: dev

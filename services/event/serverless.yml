@@ -1,0 +1,53 @@
+service: event
+
+custom: ${file(../../lib/serverless/serverless.common.yml):custom}
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, self:custom.stage.dev}
+  region: ${opt:region, self:custom.region, 'eu-west-1'}
+  environment:
+    TABLE_NAME: ${self:provider.stage}-event
+
+  apiGateway:
+    restApiId:
+      "Fn::ImportValue": ${opt:stage, self:provider.stage}-ExtApiGatewayRestApiId
+    restApiRootResourceId:
+      "Fn::ImportValue": ${opt:stage, self:provider.stage}-ExtApiGatewayRestApiRootResourceId
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_NAME}"
+
+functions:
+  get:
+    handler: get.handler
+    events:
+      - http:
+          path: /event
+          method: GET
+          private: true
+  create:
+    handler: create.handler
+    events:
+      - http:
+          path: /event
+          method: POST
+          private: true
