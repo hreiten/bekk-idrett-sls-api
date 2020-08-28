@@ -4,7 +4,7 @@ custom:
   region: eu-west-1
   bundle:
     tsConfig: "../../tsconfig.json"
-    sourceMap: false
+    sourcemaps: false
     caching: false
   stage:
     prod: prod
